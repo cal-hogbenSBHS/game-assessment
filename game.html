@@ -1,0 +1,134 @@
+<!doctype html>
+
+<head>
+  <title></title>
+  <h1>just keep running</h1>
+  <script src="player.js"></script>
+</head>
+
+<style>
+  body {
+
+    /* background-repeat: none; */
+    background-size: 100vw 100vh;
+    background-color: black;
+    text-align: center;
+
+  }
+
+  button {
+    display: block;
+    margin: 10px auto;
+    width: 10px;
+    font-size: 10px;
+    color: tomato;
+
+  }
+
+  canvas {
+    display: block;
+    margin: 10vh auto;
+
+
+  }
+
+  h1 {
+    color: violet;
+
+  }
+</style>
+
+
+
+<body>
+
+  <canvas id="gameCanvas" width="800" height="600">
+    <button onclick="location.reload();">Respawn</button>
+
+  </canvas>
+
+</body>
+<script>
+  var canvas, canvasContext;
+
+  window.onload = function () {
+
+    canvas = document.getElementById('gameCanvas');
+    canvasContext = canvas.getContext('2d');
+
+    document.addEventListener('keydown', keyPressed);
+    document.addEventListener('keyup', keyReleased);
+
+    setInterval(mainloop, 1000 / 50);
+  }
+
+
+
+  var pXpos = 380;
+  var pYpos = 550;
+  var pXspeed = 5;
+  var pYspeed = 5;
+  const P_SIZE = 50;
+
+  // key code
+  const LEFT_KEY = 65;
+  const RIGHT_KEY = 68;
+  const SPACE_KEY = 32;
+  var leftPressed = false;
+  var rightPressed = false;
+  var spacePressed = false;
+
+  var playerImg = new Image();
+  playerImg.src = 'images/sprite.png';
+  var player = new Player(playerImg, pXpos, pYpos, P_SIZE, P_SIZE, 'red', pXspeed, pYspeed);
+
+  var BG = new Image();
+  BG.src = 'images/BG.jpg';
+
+  var setUp = true;
+
+  function mainloop() {
+    // colorRect(0, 0, canvas.width, canvas.height, 'grey');
+    drawImgs(BG, 0, 0, canvas.width, canvas.height);
+    // drawImage(BG, 0, 0, canvas.Width, canvas.heisght);
+
+    player.drawimgs(player.playerImg, player.pXpos, player.pYpos, player.P_SIZE, player.P_SIZE) // player
+    player.playerMove();
+
+  }
+
+
+
+  function keyPressed(evt) {
+    if (evt.keyCode == LEFT_KEY) {
+      leftPressed = true;
+    }
+    if (evt.keyCode == RIGHT_KEY) {
+      rightPressed = true;
+    }
+    if (evt.keyCode == SPACE_KEY) {
+      spacePressed = true;
+    }
+  }
+
+  function keyReleased(evt) {
+    if (evt.keyCode == LEFT_KEY) {
+      leftPressed = false;
+    }
+    if (evt.keyCode == RIGHT_KEY) {
+      rightPressed = false;
+    }
+    if (evt.keyCode == SPACE_KEY) {
+      spacePressed = false;
+    }
+  }
+
+  function colorRect(x, y, w, h, c) {
+    canvasContext.fillStyle = c;
+    canvasContext.fillRect(x, y, w, h);
+  }
+
+  function drawImgs(src, x, y, w, h) {
+    canvasContext.drawImage(src, x, y, w, h);
+  }
+</script>
