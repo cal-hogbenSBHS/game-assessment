@@ -1,9 +1,10 @@
 <!doctype html>
 
 <head>
-  <title></title>
+  <title>gravity switch</title>
   <h1>just keep running</h1>
   <script src="player.js"></script>
+  <script src="platform.js"></script>
 </head>
 
 <style>
@@ -19,9 +20,10 @@
   button {
     display: block;
     margin: 10px auto;
-    width: 10px;
-    font-size: 10px;
-    color: tomato;
+    width: 10%;
+    font-size: 20px;
+    color: black;
+    background-color: firebrick;
 
   }
 
@@ -43,11 +45,12 @@
 <body>
 
   <canvas id="gameCanvas" width="800" height="600">
-    <button onclick="location.reload();">Respawn</button>
+
 
   </canvas>
 
 </body>
+<button onclick="location.reload();">Respawn</button>
 <script>
   var canvas, canvasContext;
 
@@ -62,13 +65,25 @@
     setInterval(mainloop, 1000 / 50);
   }
 
+  var username = "";
+  while (username == '' || username == null) {
+    username = prompt('what is your name?');
+  }
+
+
 
 
   var pXpos = 380;
-  var pYpos = 550;
+  var pYpos = 300;
   var pXspeed = 5;
   var pYspeed = 5;
   const P_SIZE = 50;
+  var gravityRate = 0.3;
+
+  var obstacle = 0.3;
+
+
+
 
   // key code
   const LEFT_KEY = 65;
@@ -77,10 +92,22 @@
   var leftPressed = false;
   var rightPressed = false;
   var spacePressed = false;
+  var score = 0;
+
+
+
 
   var playerImg = new Image();
   playerImg.src = 'images/sprite.png';
-  var player = new Player(playerImg, pXpos, pYpos, P_SIZE, P_SIZE, 'red', pXspeed, pYspeed);
+
+  var playerImg2 = new Image();
+  playerImg2.src = 'images/sprite2.png';
+
+  var imgMode = 0;
+  var playerImgs = [playerImg, playerImg2]
+
+  var player = new Player(playerImgs[imgMode], pXpos, pYpos, P_SIZE, P_SIZE, 'red', pXspeed, pYspeed, gravityRate,
+    imgMode);
 
   var BG = new Image();
   BG.src = 'images/BG.jpg';
@@ -88,16 +115,35 @@
   var setUp = true;
 
   function mainloop() {
+
+    if (setUp) {
+      for (var i = 0; i < 10; i++) {
+        makePlatforms();
+      }
+      setUp = false;
+    }
     // colorRect(0, 0, canvas.width, canvas.height, 'grey');
     drawImgs(BG, 0, 0, canvas.width, canvas.height);
     // drawImage(BG, 0, 0, canvas.Width, canvas.heisght);
 
-    player.drawimgs(player.playerImg, player.pXpos, player.pYpos, player.P_SIZE, player.P_SIZE) // player
+    player.drawimgs(player.playerImgs, player.pXpos, player.pYpos, player.P_SIZE, player.P_SIZE) // player
     player.playerMove();
+
+    if (spacePressed && holding == false) {
+      player.changeGravity();
+    }
+
+    if(platforms.length > 0){
+      platforms.forEach(function(plat,i,array){
+        plat.drawPlat();
+        plat.movePlat();
+      });
+    }
+
 
   }
 
-
+  var holding = false;
 
   function keyPressed(evt) {
     if (evt.keyCode == LEFT_KEY) {
@@ -111,6 +157,15 @@
     }
   }
 
+  function drawtext(msg, x, y, f, c) {
+    canvasContext.font = f;
+    canvasContext.fillStyle = c;
+    canvasContext.filltext(msg, x, y);
+
+  }
+
+
+
   function keyReleased(evt) {
     if (evt.keyCode == LEFT_KEY) {
       leftPressed = false;
@@ -119,6 +174,7 @@
       rightPressed = false;
     }
     if (evt.keyCode == SPACE_KEY) {
+      holding = false;
       spacePressed = false;
     }
   }
@@ -130,5 +186,37 @@
 
   function drawImgs(src, x, y, w, h) {
     canvasContext.drawImage(src, x, y, w, h);
+  }
+
+  var platCounter = 0;
+  var platforms = [];
+
+  function makePlatforms() {
+    var platLength = Math.floor(Math.random() * (canvas.width * 0.2 - canvas.width * 0.05) + canvas.width * 0.05);
+    var platHeight = 20;
+    var platXpos = canvas.width + platCounter * platLength;
+    var platYpos = 0;
+
+    if (platCounter % 2 == 0 || platCounter == 0) {
+      platYpos = 0 + Math.floor(Math.random() * (platHeight * 3));
+    } else {
+      platYpos = canvas.height - Math.floor(Math.random() * (platHeight * 4));
+    }
+
+    var platXspeed = Math.floor(Math.random() * (10 - 4) + 4);
+
+    platCounter++
+    // var platform = {
+    //   platXpos: platXpos,
+    //   platYpos: platYpos,
+    //   platLength: platLength,
+    //   platHeight: platHeight,
+    //   platXspeed: platXspeed
+    // }
+
+    var platform = new Platform(platXpos, platYpos, platLength, platHeight, "black", platXspeed)
+
+    platforms.push(platform);
+
   }
 </script>
