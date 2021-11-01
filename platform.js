@@ -15,15 +15,15 @@
      canvasContext.fillRect(this.x, this.y, this.w, this.h);
    }
 
-   movePlat(){
-    this.x -= this.xSpeed;
+   movePlat() {
+     this.x -= this.xSpeed;
 
-  if(this.x < 0){
-    this.x = canvas.width;
-  }
+     if (this.x < 0) {
+       this.x = canvas.width;
+     }
    }
 
-   
 
-    
+
+
  }

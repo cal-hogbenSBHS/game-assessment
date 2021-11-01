@@ -71,43 +71,43 @@
   }
 
   var difficulty = '';
-        var difficultypass = false;
-        while (difficultypass == false) {
-            difficulty = prompt("select the difficulty: easy, medium, hard", "easy");
+  var difficultypass = false;
+  while (difficultypass == false) {
+    difficulty = prompt("select the difficulty: easy, medium, hard", "easy");
 
-            difficulty = difficulty.toLowerCase()
+    difficulty = difficulty.toLowerCase()
 
-            if (difficulty == 'easy' || difficulty == 'medium' || difficulty == 'hard') {
-                difficultypass = true;
-            }
-        }
-
-
-
-            //  {
-                // colorRect(0, 0, canvas.width, canvas.height, 'black');
-                // drawtext('Game over ' + userName + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be death screen 
-            // }
+    if (difficulty == 'easy' || difficulty == 'medium' || difficulty == 'hard') {
+      difficultypass = true;
+    }
+  }
 
 
-        //enemy difficulties
 
-        var maxSpeed = 0;
-        var minSpeed = 0;
+  //  {
+  // colorRect(0, 0, canvas.width, canvas.height, 'black');
+  // drawtext('Game over ' + userName + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be death screen 
+  // }
 
-        if (difficulty == 'easy') {
-            maxSpeed = 7;
-            minSpeed = 2;
-        }
 
-        if (difficulty == 'medium') {
-            maxSpeed = 8;
-            minSpeed = 3;
-        }
-        if (difficulty == 'hard') {
-            maxSpeed = 12;
-            minSpeed = 5;
-        }
+  //enemy difficulties
+
+  var maxSpeed = 0;
+  var minSpeed = 0;
+
+  if (difficulty == 'easy') {
+    maxSpeed = 7;
+    minSpeed = 2;
+  }
+
+  if (difficulty == 'medium') {
+    maxSpeed = 8;
+    minSpeed = 3;
+  }
+  if (difficulty == 'hard') {
+    maxSpeed = 12;
+    minSpeed = 5;
+  }
 
 
   var pXpos = 380;
@@ -171,8 +171,8 @@
       player.changeGravity();
     }
 
-    if(platforms.length > 0){
-      platforms.forEach(function(plat,i,array){
+    if (platforms.length > 0) {
+      platforms.forEach(function (plat, i, array) {
         plat.drawPlat();
         plat.movePlat();
       });
@@ -241,7 +241,7 @@
       platYpos = canvas.height - Math.floor(Math.random() * (platHeight * 4));
     }
 
-    if (platYpos + platHeight> P_SIZE) {
+    if (platYpos + platHeight > P_SIZE) {
       console.log('hit');
     }
 
@@ -249,12 +249,12 @@
 
     platCounter++
     var platform = {
-       platXpos: platXpos,
+      platXpos: platXpos,
       platYpos: platYpos,
-       platLength: platLength,
-       platHeight: platHeight,
-       platXspeed: platXspeed
-     }
+      platLength: platLength,
+      platHeight: platHeight,
+      platXspeed: platXspeed
+    }
 
     var platform = new Platform(platXpos, platYpos, platLength, platHeight, "black", platXspeed)
 

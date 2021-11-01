@@ -19,13 +19,13 @@ class Player {
   changeGravity() {
     console.log(this.rate);
     holding = true;
-    if (this.y = 1) { // what one is down or up and then add this.y += 3; for a mini jump to unstick it 
+    if (this.rate = -1) { // what one is down or up and then add this.y += 3; for a mini jump to unstick it 
       this.y += 3;
       this.yVel = 1; // if postive or negative this.rate = 1 or -1
       this.imgMode = 1;
       console.log(this.imgMode)
     } else {
-      this.yVel = -1; // if postive or negative this.rate = 1 or -1
+      this.yVel = 1; // if postive or negative this.rate = 1 or -1
       this.imgMode = 0;
       console.log(this.imgMode)
     }
@@ -62,35 +62,35 @@ class Player {
 
   }
 
-  plarformHit(item){
-    return (this.x + this.w > player.x && this.x < player.x + player.w && 
-     this.y + this.h > player.y && this.y < player.y + player.h);
-   }  
+  plarformHit(item) {
+    return (this.x + this.w > player.x && this.x < player.x + player.w &&
+      this.y + this.h > player.y && this.y < player.y + player.h);
+  }
 
-   hasHitPlatform(platform){
-     return this.plarformHit(platform);
-   }
+  hasHitPlatform(platform) {
+    return this.plarformHit(platform);
+  }
 
-   hasCollided(){
-     var self = this;
-     var collided = false;
+  hasCollided() {
+    var self = this;
+    var collided = false;
 
-     platforms.forEach(function(platform,i){
-      if(self.hasHitPlatform(platform)){
+    platforms.forEach(function (platform, i) {
+      if (self.hasHitPlatform(platform)) {
 
-        
-        if(self.y + self.h >= platform.y && self.y + self.h < platform.y + platform.h){
+
+        if (self.y + self.h >= platform.y && self.y + self.h < platform.y + platform.h) {
           self.yVel = 0.0;
-          
+
         } // landing on top of surface bottom of screen
-        
-        if(self.y <= platform.y + platform.x && self.y + self.h > platform.y + 1 && self.x < platform.x + platform.w){
+
+        if (self.y <= platform.y + platform.x && self.y + self.h > platform.y + 1 && self.x < platform.x + platform.w) {
           self.x - 4;
         }
-        
+
       }
-        
-      });
-      
-   }
+
+    });
+
+  }
 }
