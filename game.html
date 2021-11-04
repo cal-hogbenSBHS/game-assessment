@@ -2,7 +2,7 @@
 
 <head>
   <title>gravity switch</title>
-  <h1>just keep switching`</h1>
+  <h1>just keep switching</h1>
   <script src="player.js"></script>
   <script src="platform.js"></script>
 </head>
@@ -71,43 +71,44 @@
   }
 
   var difficulty = '';
-        var difficultypass = false;
-        while (difficultypass == false) {
-            difficulty = prompt("select the difficulty: easy, medium, hard", "easy");
+  var difficultypass = false;
+  while (difficultypass == false) {
+    difficulty = prompt("select the difficulty: easy, medium, hard", "easy");
 
-            difficulty = difficulty.toLowerCase()
+    difficulty = difficulty.toLowerCase()
 
-            if (difficulty == 'easy' || difficulty == 'medium' || difficulty == 'hard') {
-                difficultypass = true;
-            }
-        }
-
-
-
-            //  {
-                // colorRect(0, 0, canvas.width, canvas.height, 'black');
-                // drawtext('Game over ' + userName + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be death screen 
-            // }
+    if (difficulty == 'easy' || difficulty == 'medium' || difficulty == 'hard') {
+      difficultypass = true;
+      console.log("easy");
+    }
+  }
 
 
-        //enemy difficulties
 
-        var maxSpeed = 0;
-        var minSpeed = 0;
+  //else {
+  //colorRect(0, 0, canvas.width, canvas.height, 'black');
+  // drawtext('Game over ' + userName + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be death screen 
+  //}
 
-        if (difficulty == 'easy') {
-            maxSpeed = 7;
-            minSpeed = 2;
-        }
 
-        if (difficulty == 'medium') {
-            maxSpeed = 8;
-            minSpeed = 3;
-        }
-        if (difficulty == 'hard') {
-            maxSpeed = 12;
-            minSpeed = 5;
-        }
+  //enemy difficulties
+
+  var platmaxSpeed = 0;
+  var platminSpeed = 0;
+
+  if (difficulty == 'easy') {
+    platmaxSpeed = 2;
+    platminSpeed = 1;
+  }
+
+  if (difficulty == 'medium') {
+    platmaxSpeed = 8;
+    platminSpeed = 6;
+  }
+  if (difficulty == 'hard') {
+    platmaxSpeed = 12;
+    platminSpeed = 8;
+  }
 
 
   var pXpos = 380;
@@ -115,7 +116,7 @@
   var pXspeed = 5;
   var pYspeed = 5;
   const P_SIZE = 50;
-  var gravityRate = 0.3;
+  var gravityRate = 0.5;
 
   var obstacle = 0.3;
 
@@ -130,6 +131,7 @@
   var rightPressed = false;
   var spacePressed = false;
   var score = 0;
+  var lives = 3;
 
 
 
@@ -152,34 +154,39 @@
   var setUp = true;
 
   function mainloop() {
-
     if (setUp) {
       for (var i = 0; i < 10; i++) {
         makePlatforms();
       }
       setUp = false;
-    }
-    // colorRect(0, 0, canvas.width, canvas.height, 'grey');
-    drawImgs(BG, 0, 0, canvas.width, canvas.height);
-    // drawImage(BG, 0, 0, canvas.Width, canvas.heisght);
 
+    }
+    drawImgs(BG, 0, 0, canvas.width, canvas.height);
+  
     player.drawimgs(player.playerImgs, player.pXpos, player.pYpos, player.P_SIZE, player.P_SIZE) // player
     player.playerMove();
     player.hasCollided();
-
+  
     if (spacePressed && holding == false) {
       player.changeGravity();
     }
-
-    if(platforms.length > 0){
-      platforms.forEach(function(plat,i,array){
+  
+    if (platforms.length > 0) {
+      platforms.forEach(function (plat, i, array) {
         plat.drawPlat();
         plat.movePlat();
       });
     }
 
+    drawtext('score: ' + score, canvas.width * 0.01, 20, '15px cantury gothic', 'white');
+    drawtext('lives: ' + lives, canvas.width * 0.01, 50, '15px cantury gothic', 'white');
 
   }
+  
+  
+  // colorRect(0, 0, canvas.width, canvas.height, 'grey');
+  // drawImage(BG, 0, 0, canvas.Width, canvas.heisght);
+
 
   var holding = false;
 
@@ -198,7 +205,7 @@
   function drawtext(msg, x, y, f, c) {
     canvasContext.font = f;
     canvasContext.fillStyle = c;
-    canvasContext.filltext(msg, x, y);
+    canvasContext.fillText(msg, x, y );
 
   }
 
@@ -228,12 +235,14 @@
 
   var platCounter = 0;
   var platforms = [];
+ 
 
   function makePlatforms() {
     var platLength = Math.floor(Math.random() * (canvas.width * 0.4 - canvas.width * 0.25) + canvas.width * 0.25);
+    // console.log(canvas.width)
     var platHeight = 20;
     var platXpos = canvas.width + platCounter * platLength;
-    var platYpos = 0;
+    var platYpos = 1;
 
     if (platCounter % 2 == 0 || platCounter == 0) {
       platYpos = 0 + Math.floor(Math.random() * (platHeight * 3));
@@ -241,24 +250,53 @@
       platYpos = canvas.height - Math.floor(Math.random() * (platHeight * 4));
     }
 
-    if (platYpos + platHeight> P_SIZE) {
-      console.log('hit');
-    }
-
-    var platXspeed = Math.floor(Math.random() * (4 - 2) + 2);
+    var platXspeed = Math.floor(Math.random() * (4 - 2) + 2) * (platmaxSpeed - platminSpeed) + platminSpeed;
 
     platCounter++
     var platform = {
-       platXpos: platXpos,
+      platXpos: platXpos,
       platYpos: platYpos,
-       platLength: platLength,
-       platHeight: platHeight,
-       platXspeed: platXspeed
-     }
+      platLength: platLength,
+      platHeight: platHeight,
+      platXspeed: platXspeed,
+    }
 
-    var platform = new Platform(platXpos, platYpos, platLength, platHeight, "black", platXspeed)
+    var platform = new Platform(platXpos, platYpos, platLength, platHeight, "black", platXspeed);
 
     platforms.push(platform);
 
+    //score++;
   }
+
+
+  function dead() {
+  if (dead == true) {
+  drawtext('You scored ' + score + username, 50, canvas.height / 2);
+  if (pYpos > canvas.height) {
+    lives--;
+  pYpos = 0;
+  gameover = true;
+  }
+
+  }
+  }
+
+  
+
+
+
+
+
+  //}
+
+
+
+  //else {
+
+  //colorRect(0, 0, canvas.width, canvas.height, 'black');
+  //drawtext('Game over ' + userName + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be death screen 
+  //}
+
+
+  //enemy difficulties
 </script>
