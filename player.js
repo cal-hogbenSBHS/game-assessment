@@ -19,15 +19,16 @@ class Player {
   changeGravity() {
     console.log(this.rate);
     holding = true;
-    if (this.rate = -1) { // what one is down or up and then add this.y += 3; for a mini jump to unstick it 
+    if (this.rate >= 0) {
       this.y += 3;
       this.yVel = 1; // if postive or negative this.rate = 1 or -1
+      this.rate = 1;
       this.imgMode = 1;
-      console.log(this.imgMode)
     } else {
-      this.yVel = 1; // if postive or negative this.rate = 1 or -1
+      this.y += -3;
+      this.yVel = -1; // if postive or negative this.rate = 1 or -1
       this.imgMode = 0;
-      console.log(this.imgMode)
+      this.rate = -1;
     }
     this.rate *= -1;
   }
@@ -38,16 +39,20 @@ class Player {
 
     if (this.y > canvas.height) {
       this.y = 0
+     
+      lives--;
     }
 
     if (this.y < 0) {
-      this.y = canvas.height - this.h;
+     this.y = canvas.height - this.h;
+      lives--;
     }
 
     if (rightPressed) {
       this.x += this.xSpeed;
       if (this.x > canvas.width) { // once out of right screen wrap to left 
         this.x = 0;
+        lives--;
       }
     }
 
@@ -55,7 +60,10 @@ class Player {
       this.x -= this.xSpeed;
       if (this.x < 0) { // once out of left side of screen wrap to right
         this.x = canvas.width - this.w;
+        deaths++;
+        lives--;
       }
+      
     }
 
 
@@ -63,8 +71,9 @@ class Player {
   }
 
   plarformHit(item) {
-    return (this.x + this.w > player.x && this.x < player.x + player.w &&
-      this.y + this.h > player.y && this.y < player.y + player.h);
+    return (this.x <= (item.x + item.w) && (this.x + this.w) >= item.x) &&
+      (this.y <= (item.y + item.h) && (this.y + this.h) >= item.y);
+      
   }
 
   hasHitPlatform(platform) {
@@ -73,24 +82,35 @@ class Player {
 
   hasCollided() {
     var self = this;
-    var collided = false;
+    var collided = true;
 
     platforms.forEach(function (platform, i) {
       if (self.hasHitPlatform(platform)) {
 
-
         if (self.y + self.h >= platform.y && self.y + self.h < platform.y + platform.h) {
-          self.yVel = 0.0;
+          if (self.y > canvas.height / 2) {
+            self.y -= 1;
+            self.yVel = -0.1;
+            console.log('feet land')
+            score+=3;
+          }
+        } // oscreen
 
-        } // landing on top of surface bottom of screen
+        if (self.y <= platform.y + platform.h && self.y < canvas.height / 2) { // if moving down to get the character to move up until not touching platform
+          self.y += 1;
+          self.yVel = 0.1;
+          console.log('head land');
+          score+=3;
+        }
 
-        if (self.y <= platform.y + platform.x && self.y + self.h > platform.y + 1 && self.x < platform.x + platform.w) {
-          self.x - 4;
+        if (self.x + self.w >= platform.x - 1 && self.y > platform.y + platform.h / 2 &&
+          self.x > platform.x) {
+          self.x -= 4;
         }
 
       }
 
     });
-
+    score--;
   }
 }
