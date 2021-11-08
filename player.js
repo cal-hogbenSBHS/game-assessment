@@ -39,16 +39,20 @@ class Player {
 
     if (this.y > canvas.height) {
       this.y = 0
+     
+      lives--;
     }
 
     if (this.y < 0) {
-      this.y = canvas.height - this.h;
+     this.y = canvas.height - this.h;
+      lives--;
     }
 
     if (rightPressed) {
       this.x += this.xSpeed;
       if (this.x > canvas.width) { // once out of right screen wrap to left 
         this.x = 0;
+        lives--;
       }
     }
 
@@ -56,7 +60,10 @@ class Player {
       this.x -= this.xSpeed;
       if (this.x < 0) { // once out of left side of screen wrap to right
         this.x = canvas.width - this.w;
+        deaths++;
+        lives--;
       }
+      
     }
 
 
@@ -66,6 +73,7 @@ class Player {
   plarformHit(item) {
     return (this.x <= (item.x + item.w) && (this.x + this.w) >= item.x) &&
       (this.y <= (item.y + item.h) && (this.y + this.h) >= item.y);
+      
   }
 
   hasHitPlatform(platform) {
@@ -84,7 +92,7 @@ class Player {
             self.y -= 1;
             self.yVel = -0.1;
             console.log('feet land')
-            score++;
+            score+=3;
           }
         } // oscreen
 
@@ -92,7 +100,7 @@ class Player {
           self.y += 1;
           self.yVel = 0.1;
           console.log('head land');
-          score++;
+          score+=3;
         }
 
         if (self.x + self.w >= platform.x - 1 && self.y > platform.y + platform.h / 2 &&
@@ -103,6 +111,6 @@ class Player {
       }
 
     });
-
+    score--;
   }
 }

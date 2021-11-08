@@ -84,9 +84,8 @@
   }
 
 
-
   //else {
-  //colorRect(0, 0, canvas.width, canvas.height, 'black');
+  //colorRect(0, 0,8 canvas.width, canvas.height, 'black');
   // drawtext('Game over ' + userName + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be death screen 
   //}
 
@@ -103,7 +102,7 @@
 
   if (difficulty == 'medium') {
     platmaxSpeed = 8;
-    platminSpeed = 6;
+    platminSpeed = 4;
   }
   if (difficulty == 'hard') {
     platmaxSpeed = 12;
@@ -130,8 +129,11 @@
   var leftPressed = false;
   var rightPressed = false;
   var spacePressed = false;
-  var score = 0;
-  var lives = 3;
+  var score = 100;
+  var lives = 1;
+  var deaths = 0;
+  var setUp = true;
+  var gameRun = true;
 
 
 
@@ -152,8 +154,12 @@
   BG.src = 'images/BG.jpg';
 
   var setUp = true;
+  var initilaimput = false;
 
   function mainloop() {
+    if (gameRun){
+
+   
     if (setUp) {
       for (var i = 0; i < 10; i++) {
         makePlatforms();
@@ -162,10 +168,14 @@
 
     }
     drawImgs(BG, 0, 0, canvas.width, canvas.height);
+    if(initilaimput){
+      player.playerMove();
+
+    }
   
     player.drawimgs(player.playerImgs, player.pXpos, player.pYpos, player.P_SIZE, player.P_SIZE) // player
-    player.playerMove();
     player.hasCollided();
+    
   
     if (spacePressed && holding == false) {
       player.changeGravity();
@@ -181,12 +191,40 @@
     drawtext('score: ' + score, canvas.width * 0.01, 20, '15px cantury gothic', 'white');
     drawtext('lives: ' + lives, canvas.width * 0.01, 50, '15px cantury gothic', 'white');
 
-  }
-  
-  
-  // colorRect(0, 0, canvas.width, canvas.height, 'grey');
-  // drawImage(BG, 0, 0, canvas.Width, canvas.heisght);
 
+if ( lives < 0) {
+  gameRun = false;
+}
+if(score < 0){
+  lives--;
+  score = 500;
+}
+    }
+else{
+  colorRect(0, 0, canvas.width, canvas.height, 'black');
+  drawtext('Game over ' + username + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be d
+
+}
+  //colorRect(0, 0, canvas.width, canvas.height, 'black');
+ // drawtext('Game over ' + username + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be death screen 
+}
+
+
+
+
+//else {
+  //colorRect(0, 0,8 canvas.width, canvas.height, 'black');
+   //drawtext('Game over ' + userName + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be death screen 
+  //}
+
+
+
+
+
+
+  
+  
+  
 
   var holding = false;
 
@@ -199,6 +237,7 @@
     }
     if (evt.keyCode == SPACE_KEY) {
       spacePressed = true;
+      initilaimput = true
     }
   }
 
@@ -269,17 +308,17 @@
   }
 
 
-  function dead() {
-  if (dead == true) {
-  drawtext('You scored ' + score + username, 50, canvas.height / 2);
-  if (pYpos > canvas.height) {
-    lives--;
-  pYpos = 0;
-  gameover = true;
-  }
+  //function dead() {
+  //if (dead == true) {
+  //drawtext('You scored ' + score + username, 50, canvas.height / 2);
+  //if (pYpos > canvas.height) {
+    //lives--;
+  //pYpos = 0;
+  //gameover = true;
+ // }
 
-  }
-  }
+ // }
+  //}
 
   
 
