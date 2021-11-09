@@ -1,6 +1,6 @@
  class Platform {
    constructor(x, y, w, h, c, xSpeed) {
-      //  this.image = image
+     //  this.image = image
      this.x = x;
      this.y = y;
      this.w = w;
@@ -10,7 +10,7 @@
 
    }
 
-   drawPlat() {
+   drawPlat() { //draws platforms
      canvasContext.fillStyle = this.c;
      canvasContext.fillRect(this.x, this.y, this.w, this.h);
    }

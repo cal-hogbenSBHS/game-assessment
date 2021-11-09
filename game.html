@@ -14,7 +14,6 @@
     background-size: 100vw 100vh;
     background-color: black;
     text-align: center;
-
   }
 
   button {
@@ -45,12 +44,13 @@
 <body>
 
   <canvas id="gameCanvas" width="800" height="600">
-
-
+    
   </canvas>
 
 </body>
 <button onclick="location.reload();">Respawn</button>
+<p style="color: red;"> instructions: Right and left arrow keys to move, spacebar to jump, and shift to switch gravity. </p>
+
 <script>
   var canvas, canvasContext;
 
@@ -67,13 +67,13 @@
 
   var username = "";
   while (username == '' || username == null) {
-    username = prompt('what is your name?');
+    username = prompt('what is your name?'); //prompts username input
   }
 
   var difficulty = '';
   var difficultypass = false;
   while (difficultypass == false) {
-    difficulty = prompt("select the difficulty: easy, medium, hard", "easy");
+    difficulty = prompt("select the difficulty: easy, medium, hard", "easy"); //prompts difficulty input
 
     difficulty = difficulty.toLowerCase()
 
@@ -84,32 +84,26 @@
   }
 
 
-  //else {
-  //colorRect(0, 0,8 canvas.width, canvas.height, 'black');
-  // drawtext('Game over ' + userName + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be death screen 
-  //}
-
-
   //enemy difficulties
 
   var platmaxSpeed = 0;
   var platminSpeed = 0;
 
-  if (difficulty == 'easy') {
+  if (difficulty == 'easy') { //easy difficulty platform speeds
     platmaxSpeed = 2;
     platminSpeed = 1;
   }
 
-  if (difficulty == 'medium') {
+  if (difficulty == 'medium') { //medium difficulty platform speeds
     platmaxSpeed = 8;
     platminSpeed = 4;
   }
-  if (difficulty == 'hard') {
+  if (difficulty == 'hard') { //hard difficulty platform speeds
     platmaxSpeed = 12;
     platminSpeed = 8;
   }
 
-
+  // variables
   var pXpos = 380;
   var pYpos = 300;
   var pXspeed = 5;
@@ -137,7 +131,7 @@
 
 
 
-
+  // player and backgrounds image sources 
   var playerImg = new Image();
   playerImg.src = 'images/sprite.png';
 
@@ -154,77 +148,59 @@
   BG.src = 'images/BG.jpg';
 
   var setUp = true;
-  var initilaimput = false;
+  var initialInput = false;
 
   function mainloop() {
-    if (gameRun){
+    if (gameRun) {
 
-   
-    if (setUp) {
-      for (var i = 0; i < 10; i++) {
-        makePlatforms();
+
+      if (setUp) {
+        for (var i = 0; i < 10; i++) {
+          makePlatforms();
+        }
+        setUp = false;
+
       }
-      setUp = false;
+      drawImgs(BG, 0, 0, canvas.width, canvas.height);
+      if (initialInput) {
+        player.playerMove();
+
+      }
+
+      player.drawimgs(player.playerImgs, player.pXpos, player.pYpos, player.P_SIZE, player.P_SIZE) // player
+      player.hasCollided();
+
+
+      if (spacePressed && holding == false) { // responcible for grav change
+        player.changeGravity();
+      }
+
+      if (platforms.length > 0) {
+        platforms.forEach(function (plat, i, array) {
+          plat.drawPlat();
+          plat.movePlat();
+        });
+      }
+
+      drawtext('score: ' + score, canvas.width * 0.01, 20, '15px century gothic', 'white'); // draws score counter
+      drawtext('lives: ' + lives, canvas.width * 0.01, 50, '15px century gothic', 'white'); // draws lives counter
+
+
+      if (lives < 0) {
+        gameRun = false;
+      }
+      if (score < 0) {
+        //lives--;
+        score = 500;
+      }
+    } else {
+      colorRect(0, 0, canvas.width, canvas.height, 'black'); // when lives <0 death screen occurs
+      drawtext('Game over ' + username + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2,
+        '25px century gothic', 'red'); // be death screen
 
     }
-    drawImgs(BG, 0, 0, canvas.width, canvas.height);
-    if(initilaimput){
-      player.playerMove();
 
-    }
-  
-    player.drawimgs(player.playerImgs, player.pXpos, player.pYpos, player.P_SIZE, player.P_SIZE) // player
-    player.hasCollided();
-    
-  
-    if (spacePressed && holding == false) {
-      player.changeGravity();
-    }
-  
-    if (platforms.length > 0) {
-      platforms.forEach(function (plat, i, array) {
-        plat.drawPlat();
-        plat.movePlat();
-      });
-    }
-
-    drawtext('score: ' + score, canvas.width * 0.01, 20, '15px cantury gothic', 'white');
-    drawtext('lives: ' + lives, canvas.width * 0.01, 50, '15px cantury gothic', 'white');
-
-
-if ( lives < 0) {
-  gameRun = false;
-}
-if(score < 0){
-  lives--;
-  score = 500;
-}
-    }
-else{
-  colorRect(0, 0, canvas.width, canvas.height, 'black');
-  drawtext('Game over ' + username + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be d
-
-}
-  //colorRect(0, 0, canvas.width, canvas.height, 'black');
- // drawtext('Game over ' + username + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be death screen 
-}
-
-
-
-
-//else {
-  //colorRect(0, 0,8 canvas.width, canvas.height, 'black');
-   //drawtext('Game over ' + userName + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be death screen 
-  //}
-
-
-
-
-
-
-  
-  
-  
+  }
 
   var holding = false;
 
@@ -237,14 +213,14 @@ else{
     }
     if (evt.keyCode == SPACE_KEY) {
       spacePressed = true;
-      initilaimput = true
+      initialInput = true;
     }
   }
 
   function drawtext(msg, x, y, f, c) {
     canvasContext.font = f;
     canvasContext.fillStyle = c;
-    canvasContext.fillText(msg, x, y );
+    canvasContext.fillText(msg, x, y);
 
   }
 
@@ -274,19 +250,19 @@ else{
 
   var platCounter = 0;
   var platforms = [];
- 
 
-  function makePlatforms() {
-    var platLength = Math.floor(Math.random() * (canvas.width * 0.4 - canvas.width * 0.25) + canvas.width * 0.25);
+
+  function makePlatforms() { // makes array of platforms
+    var platLength = Math.floor(Math.random() * (canvas.width * 0.3 - canvas.width * 0.25) + canvas.width * 0.25);
     // console.log(canvas.width)
-    var platHeight = 20;
+    var platHeight = 21;
     var platXpos = canvas.width + platCounter * platLength;
     var platYpos = 1;
 
     if (platCounter % 2 == 0 || platCounter == 0) {
       platYpos = 0 + Math.floor(Math.random() * (platHeight * 3));
     } else {
-      platYpos = canvas.height - Math.floor(Math.random() * (platHeight * 4));
+      platYpos = canvas.height - Math.floor(Math.random() * (platHeight * 3));
     }
 
     var platXspeed = Math.floor(Math.random() * (4 - 2) + 2) * (platmaxSpeed - platminSpeed) + platminSpeed;
@@ -304,38 +280,6 @@ else{
 
     platforms.push(platform);
 
-    //score++;
+
   }
-
-
-  //function dead() {
-  //if (dead == true) {
-  //drawtext('You scored ' + score + username, 50, canvas.height / 2);
-  //if (pYpos > canvas.height) {
-    //lives--;
-  //pYpos = 0;
-  //gameover = true;
- // }
-
- // }
-  //}
-
-  
-
-
-
-
-
-  //}
-
-
-
-  //else {
-
-  //colorRect(0, 0, canvas.width, canvas.height, 'black');
-  //drawtext('Game over ' + userName + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2, '25px century gothic', 'red'); //be death screen 
-  //}
-
-
-  //enemy difficulties
 </script>

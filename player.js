@@ -13,19 +13,19 @@ class Player {
   }
 
   drawimgs() {
-    canvasContext.drawImage(this.image, this.x, this.y, this.w, this.h);
+    canvasContext.drawImage(this.image, this.x, this.y, this.w, this.h); //draws palyer image
   }
 
   changeGravity() {
     console.log(this.rate);
     holding = true;
     if (this.rate >= 0) {
-      this.y += 3;
+      this.y += 2;
       this.yVel = 1; // if postive or negative this.rate = 1 or -1
       this.rate = 1;
       this.imgMode = 1;
     } else {
-      this.y += -3;
+      this.y += -2;
       this.yVel = -1; // if postive or negative this.rate = 1 or -1
       this.imgMode = 0;
       this.rate = -1;
@@ -39,12 +39,12 @@ class Player {
 
     if (this.y > canvas.height) {
       this.y = 0
-     
+
       lives--;
     }
 
     if (this.y < 0) {
-     this.y = canvas.height - this.h;
+      this.y = canvas.height - this.h;
       lives--;
     }
 
@@ -60,10 +60,9 @@ class Player {
       this.x -= this.xSpeed;
       if (this.x < 0) { // once out of left side of screen wrap to right
         this.x = canvas.width - this.w;
-        deaths++;
         lives--;
       }
-      
+
     }
 
 
@@ -73,7 +72,7 @@ class Player {
   plarformHit(item) {
     return (this.x <= (item.x + item.w) && (this.x + this.w) >= item.x) &&
       (this.y <= (item.y + item.h) && (this.y + this.h) >= item.y);
-      
+
   }
 
   hasHitPlatform(platform) {
@@ -92,15 +91,15 @@ class Player {
             self.y -= 1;
             self.yVel = -0.1;
             console.log('feet land')
-            score+=3;
+            score += 5; // resposnsible for increase in score
           }
-        } // oscreen
+        } // onscreen
 
         if (self.y <= platform.y + platform.h && self.y < canvas.height / 2) { // if moving down to get the character to move up until not touching platform
           self.y += 1;
           self.yVel = 0.1;
           console.log('head land');
-          score+=3;
+          score += 5;
         }
 
         if (self.x + self.w >= platform.x - 1 && self.y > platform.y + platform.h / 2 &&
