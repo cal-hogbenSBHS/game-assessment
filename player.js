@@ -109,7 +109,7 @@ class Player {
 
       }
 
-    });
+    }); // end func
     score--;
   }
 }

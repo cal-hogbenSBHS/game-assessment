@@ -49,7 +49,7 @@
 
 </body>
 <button onclick="location.reload();">Respawn</button>
-<p style="color: red;"> instructions: Right and left arrow keys to move, spacebar to jump, and shift to switch gravity. </p>
+<p style="color: red;"> instructions: Right and left arrow keys to move, spacebar to shift gravity, touch the platforms for points. </p>
 
 <script>
   var canvas, canvasContext;
@@ -63,7 +63,7 @@
     document.addEventListener('keyup', keyReleased);
 
     setInterval(mainloop, 1000 / 50);
-  }
+  } // end func
 
   var username = "";
   while (username == '' || username == null) {
@@ -182,8 +182,8 @@
         });
       }
 
-      drawtext('score: ' + score, canvas.width * 0.01, 20, '15px century gothic', 'white'); // draws score counter
-      drawtext('lives: ' + lives, canvas.width * 0.01, 50, '15px century gothic', 'white'); // draws lives counter
+      drawText('score: ' + score, canvas.width * 0.01, 20, '15px century gothic', 'white'); // draws score counter
+      drawText('lives: ' + lives, canvas.width * 0.01, 50, '15px century gothic', 'white'); // draws lives counter
 
 
       if (lives < 0) {
@@ -195,12 +195,12 @@
       }
     } else {
       colorRect(0, 0, canvas.width, canvas.height, 'black'); // when lives <0 death screen occurs
-      drawtext('Game over ' + username + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2,
+      drawText('Game over ' + username + ' your score was ' + score, canvas.width * 0.2, canvas.height / 2,
         '25px century gothic', 'red'); // be death screen
 
     }
 
-  }
+  } // end func
 
   var holding = false;
 
@@ -215,14 +215,14 @@
       spacePressed = true;
       initialInput = true;
     }
-  }
+  }// end func
 
-  function drawtext(msg, x, y, f, c) {
+  function drawText(msg, x, y, f, c) {
     canvasContext.font = f;
     canvasContext.fillStyle = c;
     canvasContext.fillText(msg, x, y);
 
-  }
+  } // end func
 
 
 
@@ -237,16 +237,16 @@
       holding = false;
       spacePressed = false;
     }
-  }
+  } // end func
 
   function colorRect(x, y, w, h, c) {
     canvasContext.fillStyle = c;
     canvasContext.fillRect(x, y, w, h);
-  }
+  } // end func
 
   function drawImgs(src, x, y, w, h) {
     canvasContext.drawImage(src, x, y, w, h);
-  }
+  } //end func
 
   var platCounter = 0;
   var platforms = [];
@@ -281,5 +281,5 @@
     platforms.push(platform);
 
 
-  }
+  } // end func
 </script>
